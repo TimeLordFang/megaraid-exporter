@@ -30,4 +30,4 @@ megaraid-exporter
 
 #### Thanks
 
-(repo)[https://github.com/bojleros/megacli2prom]
+[repo](https://github.com/bojleros/megacli2prom)

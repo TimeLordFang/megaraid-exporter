@@ -1,0 +1,30 @@
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  name: megaraid-exporter
+  namespace: kube-system
+  labels:
+    k8s-app: megaraid-exporter
+spec:
+  updateStrategy:
+    type: OnDelete
+  template:
+    metadata:
+      labels:
+        k8s-app: megaraid-exporter
+    spec:
+      containers:
+        - image: megaraid-exporter:1
+          imagePullPolicy: IfNotPresent
+          name: megaraid-exporter
+          ports:
+            - name: megametrics
+              containerPort: 9101
+              hostPort: 9101
+          resources:
+            limits:
+              cpu: 100m
+              memory: 30Mi
+          securityContext:
+            allowPrivilegeEscalation: true
+            privileged: true

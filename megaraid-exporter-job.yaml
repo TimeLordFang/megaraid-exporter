@@ -1,0 +1,37 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: megaraid
+  namespace: kube-system
+spec:
+  concurrencyPolicy: Allow
+  failedJobsHistoryLimit: 10
+  successfulJobsHistoryLimit: 10
+  schedule: '*/5 * * * *'
+  suspend: false
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - image: megaraid-job:1
+            imagePullPolicy: IfNotPresent
+            name: megaraid
+            resources:
+              limits:
+                cpu: 100m
+                memory: 30Mi
+            securityContext:
+              allowPrivilegeEscalation: true
+              privileged: true
+            volumeMounts:
+            - mountPath: /data/promethues_text_collector/
+              name: promethuestextcollector
+          dnsPolicy: ClusterFirst
+          restartPolicy: Never
+          schedulerName: default-scheduler
+          volumes:
+          - hostPath:
+              path: /data/promethues_text_collector/
+              type: DirectoryOrCreate
+            name: promethuestextcollector

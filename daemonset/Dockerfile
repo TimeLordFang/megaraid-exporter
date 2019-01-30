@@ -1,5 +1,5 @@
 FROM  python:2-slim-stretch
-MAINTAINER  sinan <zhihao.fang@yitu-inc.com>
+MAINTAINER  TimeLordFang
 
 RUN apt update && apt install -y curl  gnupg && \
     echo "deb http://hwraid.le-vert.net/debian stretch main" >> /etc/apt/sources.list && \

@@ -292,7 +292,10 @@ def main():
     for p in pat_pd:
       if p['regex'].match(line):
         for a in p['action']:
-          exec(a)
+          try:
+            exec(a)
+          except:
+            print("Exec Wrong at",str(a))
         continue
 
 #  print json.dumps(out, indent=2, sort_keys=True)

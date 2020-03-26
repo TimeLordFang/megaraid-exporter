@@ -290,7 +290,9 @@ def main():
 
   for line in pdlist:
     for p in pat_pd:
-      if p['regex'].match(line):
+      #if p['regex'].match(line):
+      # Other Error突增，温度指标显示 N/A ，无法采集
+      if p['regex'].match(line) and not line.split(" : ")[-1] == "N/A":
         for a in p['action']:
           try:
             exec(a)

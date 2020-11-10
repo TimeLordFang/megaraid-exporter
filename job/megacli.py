@@ -7,6 +7,18 @@ import json
 mega_cmd='/usr/sbin/megacli'
 export_path='/data/promethues_text_collector/megaraid.prom'
 
+# Other Error突增，温度指标显示 N/A; 磁盘状态为失败，speed指标为unknown。
+# 此两种情况会导致Prometheus采集报错,判断输出是否符合预期,m可酌情添加
+def isExpected(s):
+  m=[
+    re.compile('n/a'),
+    re.compile('unknown')
+    ]
+  for n in m:
+    if n.search(s.lower()):
+      return False
+      break
+  return True
 
 def yesno(state):
   states = {
@@ -290,9 +302,10 @@ def main():
 
   for line in pdlist:
     for p in pat_pd:
+      # Other Error突增，温度指标显示 N/A; 磁盘状态为失败，speed指标为unknown。
+      # 此两种情况会导致Prometheus采集报错,判断输出是否符合预期
+      if p['regex'].match(line) and isExpected(line.split(":")[-1]):
       #if p['regex'].match(line):
-      # Other Error突增，温度指标显示 N/A ，无法采集
-      if p['regex'].match(line) and not line.split(" : ")[-1] == "N/A":
         for a in p['action']:
           try:
             exec(a)
